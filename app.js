@@ -3,7 +3,8 @@ var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
 var inquirer = require('inquirer');
-var keys = require('./keys.js')
+var keys = require('./keys.js');
+var fs = require('fs');
 
 // twitter init
 var client = new Twitter({
@@ -86,6 +87,15 @@ var commands = {
       console.log('Plot: '+body.Plot);
       console.log('Actors: '+body.Actors);
       console.log('IMDB Rating: '+body.imdbRating+'\n\n');
+    })
+  },
+  "do-what-it-says": function() {
+    fs.readFile('random.txt', 'utf8', function(error, data) {
+      var random = data.split(',');
+      var toDo = random[0];
+      var term = random[1].trim();
+
+      commands[toDo](term);
     })
   }
 }
