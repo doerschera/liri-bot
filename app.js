@@ -31,6 +31,24 @@ var commands = {
       console.log(tweets);
     })
   // })
+  },
+  'spotify-this-song': function(song) {
+    if(!song) {
+      song = "Nothing";
+    }
+
+    spotify.search({type: 'track', query: song}, function(err, data) {
+        if(err) {
+          return console.log(err);
+        }
+
+        console.log('\n\n--------------------------------------------');
+        console.log(song);
+        console.log('--------------------------------------------');
+        console.log('Arist: '+data.tracks.items[0].artists[0].name);
+        console.log('Album: '+data.tracks.items[0].album.name);
+        console.log('Hear it: '+data.tracks.items[0].external_urls.spotify+'\n\n');
+    })
   }
 }
 
