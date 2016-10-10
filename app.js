@@ -14,7 +14,7 @@ var client = new Twitter({
 });
 
 var command = process.argv[2];
-var title = process.argv.slice(3).toString().replace(/,/g, " ");
+var term = process.argv.slice(3).toString().replace(/,/g, " ");
 
 var commands = {
   "my-tweets": function() {
@@ -34,7 +34,6 @@ var commands = {
   },
   'spotify-this-song': function(song) {
     if(!song) {
-      var id = "4dQQG03WaYGfHGcDAVOM1a";
       spotify.lookup({type: 'track', id: '5cqOT57zWW0omoS2znfZz8'}, function(err, data) {
         if(err) {
           return console.log(err);
@@ -55,7 +54,7 @@ var commands = {
           }
 
           console.log('\n\n--------------------------------------------');
-          console.log(song);
+          console.log(song.toUpperCase());
           console.log('--------------------------------------------');
           console.log('Artist: '+data.tracks.items[0].artists[0].name);
           console.log('Album: '+data.tracks.items[0].album.name);
@@ -63,7 +62,33 @@ var commands = {
           console.log('Hear it: '+data.tracks.items[0].external_urls.spotify+'\n\n');
       })
     }
+  },
+  "movie-this": function(title) {
+    if(!title) {
+      title = "Mr. Nobody";
+    }
+    var url = "http://www.omdbapi.com/?t="+title+"&plot=short";
+
+    request(url, function(error, response, body) {
+      if(error) {
+        return console.log(error);
+      }
+
+      var body = JSON.parse(response.body);
+      console.log(body);
+
+      console.log('\n\n--------------------------------------------');
+      console.log(title.toUpperCase());
+      console.log('--------------------------------------------');
+      console.log('Year: '+body.Year);
+      console.log('Rated: '+body.Rated);
+      console.log('Country: '+body.Country);
+      console.log('Language: '+body.Language);
+      console.log('Plot: '+body.Plot);
+      console.log('Actors: '+body.Actors);
+      console.log('IMDB Rating: '+body.imdbRating+'\n\n');
+    })
   }
 }
 
-commands[command](title);
+commands[command](term);
