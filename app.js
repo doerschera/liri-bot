@@ -34,19 +34,21 @@ var commands = {
   // })
   },
   'spotify-this-song': function(song) {
+    var songInfo =[];
+
     if(!song) {
       spotify.lookup({type: 'track', id: '5cqOT57zWW0omoS2znfZz8'}, function(err, data) {
         if(err) {
           return console.log(err);
         }
+        songInfo.push('NOTHING');
+        songInfo.push(data.artists[0].name);
+        songInfo.push(data.album.name);
+        songInfo.push(data.preview_url);
+        songInfo.push(data.external_urls.spotify);
 
-        console.log('\n\n--------------------------------------------');
-        console.log("Nothing");
-        console.log('--------------------------------------------');
-        console.log('Artist: '+data.artists[0].name);
-        console.log('Album: '+data.album.name);
-        console.log('Preview: '+data.preview_url);
-        console.log('Listen: '+data.external_urls.spotify+'\n\n')
+        writeSong();
+        writeToLog(songInfo);
       })
     } else {
       spotify.search({type: 'track', query: song}, function(err, data) {
@@ -54,17 +56,30 @@ var commands = {
             return console.log(err);
           }
 
-          console.log('\n\n--------------------------------------------');
-          console.log(song.toUpperCase());
-          console.log('--------------------------------------------');
-          console.log('Artist: '+data.tracks.items[0].artists[0].name);
-          console.log('Album: '+data.tracks.items[0].album.name);
-          console.log('Preview: '+data.tracks.items[0].preview_url);
-          console.log('Hear it: '+data.tracks.items[0].external_urls.spotify+'\n\n');
+          var dataPath = data.tracks.items[0];
+          songInfo.push(song.toUpperCase());
+          songInfo.push(dataPath.artists[0].name);
+          songInfo.push(dataPath.album.name);
+          songInfo.push(dataPath.preview_url);
+          songInfo.push(dataPath.external_urls.spotify);
+
+          writeSong();
+          writeToLog(songInfo);
       })
+    }
+
+    function writeSong() {
+      console.log('\n\n--------------------------------------------');
+      console.log(songInfo[0]);
+      console.log('--------------------------------------------');
+      console.log('Artist: '+songInfo[1]);
+      console.log('Album: '+songInfo[2]);
+      console.log('Preview: '+songInfo[3]);
+      console.log('Hear it: '+songInfo[4]+'\n\n');
     }
   },
   "movie-this": function(title) {
+    var movieInfo = [];
     if(!title) {
       title = "Mr. Nobody";
     }
@@ -76,17 +91,27 @@ var commands = {
       }
 
       var body = JSON.parse(response.body);
+      movieInfo.push(title.toUpperCase());
+      movieInfo.push(body.Year);
+      movieInfo.push(body.Rated);
+      movieInfo.push(body.Country);
+      movieInfo.push(body.Language);
+      movieInfo.push(body.Plot);
+      movieInfo.push(body.Actors);
+      movieInfo.push(body.imdbRating);
 
       console.log('\n\n--------------------------------------------');
-      console.log(title.toUpperCase());
+      console.log(movieInfo[0]);
       console.log('--------------------------------------------');
-      console.log('Year: '+body.Year);
-      console.log('Rated: '+body.Rated);
-      console.log('Country: '+body.Country);
-      console.log('Language: '+body.Language);
-      console.log('Plot: '+body.Plot);
-      console.log('Actors: '+body.Actors);
-      console.log('IMDB Rating: '+body.imdbRating+'\n\n');
+      console.log('Year: '+movieInfo[1]);
+      console.log('Rated: '+movieInfo[2]);
+      console.log('Country: '+movieInfo[3]);
+      console.log('Language: '+movieInfo[4]);
+      console.log('Plot: '+movieInfo[5]);
+      console.log('Actors: '+movieInfo[6]);
+      console.log('IMDB Rating: '+movieInfo[7]+'\n\n');
+
+      writeToLog(movieInfo);
     })
   },
   "do-what-it-says": function() {
@@ -101,3 +126,11 @@ var commands = {
 }
 
 commands[command](term);
+
+function writeToLog(array) {
+  fs.appendFile('log.txt', array+'\n\n', function(err) {
+    if(err) {
+      console.log(err);
+    }
+  })
+}
