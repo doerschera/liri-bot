@@ -1,0 +1,33 @@
+{
+  "name": "liri-bot",
+  "version": "1.0.0",
+  "description": "language recognition and interpritation interface",
+  "main": "app.js",
+  "dependencies": {
+    "request": "^2.75.0",
+    "spotify": "^0.3.0",
+    "twitter": "^1.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doerschera/liri-bot.git"
+  },
+  "keywords": [
+    "liri",
+    "bot",
+    "siri",
+    "language",
+    "twitter",
+    "spotify"
+  ],
+  "author": "Aly Doerscher",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/doerschera/liri-bot/issues"
+  },
+  "homepage": "https://github.com/doerschera/liri-bot#readme"
+}
