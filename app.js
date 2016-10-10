@@ -14,10 +14,12 @@ var client = new Twitter({
   access_token_secret: keys.access_token_secret
 });
 
+// user input variables
 var command = process.argv[2];
 var term = process.argv.slice(3).toString().replace(/,/g, " ");
 
 var commands = {
+  // command 1
   "my-tweets": function() {
     // inquirer.prompt([
     //   {
@@ -33,6 +35,7 @@ var commands = {
     })
   // })
   },
+  // command 2
   'spotify-this-song': function(song) {
     var songInfo =[];
 
@@ -41,6 +44,7 @@ var commands = {
         if(err) {
           return console.log(err);
         }
+        // push data to songInfo array
         songInfo.push('NOTHING');
         songInfo.push(data.artists[0].name);
         songInfo.push(data.album.name);
@@ -57,6 +61,7 @@ var commands = {
           }
 
           var dataPath = data.tracks.items[0];
+          // push data to songInfo array
           songInfo.push(song.toUpperCase());
           songInfo.push(dataPath.artists[0].name);
           songInfo.push(dataPath.album.name);
@@ -78,6 +83,7 @@ var commands = {
       console.log('Hear it: '+songInfo[4]+'\n\n');
     }
   },
+  // command 3
   "movie-this": function(title) {
     var movieInfo = [];
     if(!title) {
@@ -91,6 +97,7 @@ var commands = {
       }
 
       var body = JSON.parse(response.body);
+      // push data to moveInfo array
       movieInfo.push(title.toUpperCase());
       movieInfo.push(body.Year);
       movieInfo.push(body.Rated);
@@ -114,6 +121,7 @@ var commands = {
       writeToLog(movieInfo);
     })
   },
+  // command 4
   "do-what-it-says": function() {
     fs.readFile('random.txt', 'utf8', function(error, data) {
       var random = data.split(',');
@@ -125,8 +133,6 @@ var commands = {
   }
 }
 
-commands[command](term);
-
 function writeToLog(array) {
   fs.appendFile('log.txt', array+'\n\n', function(err) {
     if(err) {
@@ -134,3 +140,6 @@ function writeToLog(array) {
     }
   })
 }
+
+// call command from object
+commands[command](term);
