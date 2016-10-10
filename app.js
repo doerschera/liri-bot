@@ -75,7 +75,6 @@ var commands = {
       }
 
       var body = JSON.parse(response.body);
-      console.log(body);
 
       console.log('\n\n--------------------------------------------');
       console.log(title.toUpperCase());
