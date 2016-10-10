@@ -10,3 +10,12 @@ var client = new Twitter({
   access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
 });
+
+var command = process.argv[2];
+var title = process.argv.slice(3).toString();
+
+var commands = {
+  my-tweets: function() {
+    
+  }
+}
