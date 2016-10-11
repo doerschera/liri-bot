@@ -7,12 +7,16 @@ var keys = require('./keys.js');
 var fs = require('fs');
 
 // twitter init
-var client = new Twitter({
+var twitterConfig = {
   consumer_key: keys.twitterKeys.consumer_key,
   consumer_secret: keys.twitterKeys.consumer_secret,
   access_token_key: keys.twitterKeys.access_token_key,
-  access_token_secret: keys.access_token_secret
-});
+  access_token_secret: keys.twitterKeys.access_token_secret
+}
+
+console.log(twitterConfig);
+var client = new Twitter(twitterConfig);
+
 
 // user input variables
 var command = process.argv[2];
@@ -21,19 +25,21 @@ var term = process.argv.slice(3).toString().replace(/,/g, " ");
 var commands = {
   // command 1
   "my-tweets": function() {
-    // inquirer.prompt([
-    //   {
-    //     type: 'input',
-    //     message: 'Enter the screen name of the user whose tweets you want to read:',
-    //     name: 'userName'
-    //   }
-    // ]).then(function(input) {
-    // var screenName = input.userName;
-    // console.log(screenName);
-    client.get('favorites/list', {q: 'anything'}, function(error, tweets, response) {
-      console.log(tweets);
+    var tweetLog = [];
+    client.get('statuses/home_timeline', {user_id: '_alydoe', count: '20'}, function(error, tweets, response) {
+      for(var i = 0; i < tweets.length; i++) {
+        var tweet = [];
+        tweet.push(tweets[i].user.created_at);
+        tweet.push(tweets[i].text)
+        tweetLog.push(tweet);
+        console.log('\n\n---------------------------');
+        console.log(tweets[0].user.screen_name);
+        console.log('---------------------------');
+        console.log(tweet[0]);
+        console.log(tweet[1]);
+      }
+      writeToLog(tweetLog);
     })
-  // })
   },
   // command 2
   'spotify-this-song': function(song) {
